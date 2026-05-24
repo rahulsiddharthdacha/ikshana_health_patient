@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ikshana Health — Your Wellness Space</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#0d1f1a;color:#e8e0d4;overflow-x:hidden;min-height:100vh}
+button{font-family:'Plus Jakarta Sans',system-ui,sans-serif;cursor:pointer;border:none;outline:none;background:none}
+input,textarea,select{font-family:'Plus Jakarta Sans',system-ui,sans-serif;outline:none;border:none}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(232,224,212,.15);border-radius:99px}
+:root{
+  --bg:#0d1f1a;--bg2:#122820;--bg3:#1a3530;--bg4:#213f39;
+  --line:rgba(232,224,212,.08);--line2:rgba(232,224,212,.14);
+  --cream:#e8e0d4;--cream2:#c9bfb0;--cream3:#9e9485;
+  --teal:#4ecba0;--teal-dk:#2a9970;--teal-glow:rgba(78,203,160,.18);
+  --amber:#f0a855;--red:#e8706a;--blue:#6aaee8;
+  --serif:'Playfair Display',Georgia,serif;--sans:'Plus Jakarta Sans',system-ui,sans-serif;
+  --r:12px;--r2:18px;--r3:24px;
+}
+.page{display:none;flex-direction:column;min-height:100vh;padding-bottom:90px;animation:slideUp .38s cubic-bezier(.22,1,.36,1) both}
+.page.active{display:flex}
+#page-chat{padding-bottom:0}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-around;padding:10px 0 14px;background:rgba(13,31,26,.94);border-top:1px solid var(--line2);backdrop-filter:blur(20px)}
+.bnav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 18px;border-radius:var(--r);transition:all .2s;color:var(--cream3);font-size:.65rem;font-weight:500;letter-spacing:.03em;text-transform:uppercase}
+.bnav-item.active{color:var(--teal)}
+.bnav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:all .2s}
+.bnav-item.active svg{stroke:var(--teal)}
+.bnav-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);margin-top:2px;display:none}
+.bnav-item.active .bnav-dot{display:block}
+.page-header{padding:20px 24px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;background:rgba(13,31,26,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.page-title{font-family:var(--serif);font-size:1.35rem;color:var(--cream);font-weight:500}
+.page-subtitle{font-size:.75rem;color:var(--cream3);margin-top:2px}
+.header-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--teal-dk),var(--teal));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:.88rem;color:#0d1f1a;font-weight:700;flex-shrink:0}
+.section-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--cream3);margin-bottom:14px}
+
+/* HOME */
+.greeting-band{padding:32px 24px 20px;background:linear-gradient(180deg,rgba(78,203,160,.06) 0%,transparent 100%)}
+.greeting-time{font-size:.72rem;color:var(--teal);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.greeting-name{font-family:var(--serif);font-size:1.8rem;color:var(--cream);line-height:1.2;margin-bottom:6px}
+.greeting-name em{font-style:italic;color:var(--teal)}
+.greeting-sub{font-size:.85rem;color:var(--cream3);line-height:1.6}
+.orb-section{display:flex;flex-direction:column;align-items:center;padding:28px 24px 20px;position:relative}
+.orb-wrap{position:relative;width:200px;height:200px;cursor:pointer}
+.orb-ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(78,203,160,.2);animation:orbRing 3s ease-in-out infinite}
+.orb-ring:nth-child(2){inset:-12px;animation-delay:.4s;border-color:rgba(78,203,160,.12)}
+.orb-ring:nth-child(3){inset:-24px;animation-delay:.8s;border-color:rgba(78,203,160,.06)}
+@keyframes orbRing{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.orb{position:absolute;inset:16px;border-radius:50%;background:radial-gradient(ellipse at 35% 30%,var(--teal) 0%,var(--teal-dk) 45%,#0d4030 100%);box-shadow:0 0 60px rgba(78,203,160,.25),0 0 120px rgba(78,203,160,.1),inset 0 1px 0 rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;transition:all .6s cubic-bezier(.22,1,.36,1);animation:orbPulse 4s ease-in-out infinite}
+@keyframes orbPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+.orb-emoji{font-size:2.2rem;line-height:1}
+.orb-word{font-family:var(--serif);font-size:.75rem;color:rgba(255,255,255,.7);letter-spacing:.06em;text-transform:uppercase}
+.orb-label{margin-top:16px;font-size:.8rem;color:var(--cream3);text-align:center;line-height:1.5;max-width:200px}
+.orb-tap-hint{font-size:.7rem;color:var(--cream3);opacity:.5;margin-top:6px;animation:blink 2.5s infinite}
+@keyframes blink{0%,100%{opacity:.5}50%{opacity:.2}}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
+.mood-section{padding:0 24px 8px}
+.mood-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.mood-row::-webkit-scrollbar{display:none}
+.mood-chip{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 16px;border-radius:var(--r2);border:1px solid var(--line2);background:var(--bg2);transition:all .22s;cursor:pointer;min-width:72px}
+.mood-chip:hover{border-color:rgba(78,203,160,.4);background:var(--bg3)}
+.mood-chip.selected{border-color:var(--teal);background:rgba(78,203,160,.1);box-shadow:0 0 0 1px var(--teal)}
+.mood-chip-emoji{font-size:1.6rem}
+.mood-chip-label{font-size:.68rem;color:var(--cream3);white-space:nowrap}
+.mood-chip.selected .mood-chip-label{color:var(--teal)}
+.shraddha-card{margin:20px 24px;background:var(--bg2);border:1px solid var(--line2);border-radius:var(--r3);padding:20px;background:linear-gradient(135deg,var(--bg2) 0%,rgba(78,203,160,.05) 100%);position:relative;overflow:hidden}
+.shraddha-card::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(78,203,160,.08),transparent 70%)}
+.shraddha-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.shraddha-av{width:44px;height:44px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--teal-dk),var(--teal));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1rem;color:#0d1f1a;font-weight:700;position:relative}
+.shraddha-online-dot{position:absolute;bottom:1px;right:1px;width:10px;height:10px;border-radius:50%;background:var(--teal);border:2px solid var(--bg2);animation:pulse-dot 2s infinite}
+.shraddha-name{font-size:.95rem;font-weight:600;color:var(--cream)}
+.shraddha-role{font-size:.72rem;color:var(--cream3)}
+.shraddha-bubble{background:rgba(78,203,160,.08);border:1px solid rgba(78,203,160,.15);border-radius:4px 14px 14px 14px;padding:12px 14px;font-size:.85rem;line-height:1.6;color:var(--cream2);margin-bottom:14px;font-style:italic}
+.shraddha-bubble b{font-style:normal;color:var(--cream);font-weight:600}
+.shraddha-actions{display:flex;gap:10px}
+.btn-teal{flex:1;padding:11px;background:var(--teal);color:#0d1f1a;border-radius:var(--r);font-size:.82rem;font-weight:600;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-teal:hover{background:#60d9b0;transform:translateY(-1px)}
+.btn-ghost{padding:11px 16px;border:1px solid var(--line2);border-radius:var(--r);font-size:.82rem;color:var(--cream3);transition:all .2s}
+.btn-ghost:hover{background:var(--bg3);color:var(--cream2)}
+.stats-row{display:flex;gap:12px;padding:0 24px 20px;overflow-x:auto;scrollbar-width:none}
+.stats-row::-webkit-scrollbar{display:none}
+.stat-card{flex-shrink:0;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);padding:16px 18px;min-width:140px}
+.stat-val{font-family:var(--serif);font-size:1.8rem;color:var(--cream);line-height:1}
+.stat-label2{font-size:.7rem;color:var(--cream3);margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
+.stat-delta{font-size:.72rem;margin-top:8px;display:flex;align-items:center;gap:4px}
+.up{color:var(--teal)}.down{color:var(--red)}.neu{color:var(--cream3)}
+.insights-section{padding:0 24px 20px}
+.insight-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);padding:18px;margin-bottom:12px;display:flex;gap:14px;align-items:flex-start;transition:all .2s;cursor:pointer}
+.insight-card:hover{border-color:var(--line2);background:var(--bg3)}
+.insight-icon{width:40px;height:40px;border-radius:var(--r);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.insight-title{font-size:.875rem;font-weight:600;color:var(--cream);margin-bottom:4px}
+.insight-body{font-size:.78rem;color:var(--cream3);line-height:1.55}
+.insight-tag{display:inline-block;margin-top:8px;font-size:.65rem;padding:3px 9px;border-radius:99px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.crisis-bar{margin:0 24px 20px;background:rgba(232,112,106,.08);border:1px solid rgba(232,112,106,.2);border-radius:var(--r2);padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .2s}
+.crisis-bar:hover{background:rgba(232,112,106,.12)}
+.crisis-icon{width:38px;height:38px;border-radius:var(--r);background:rgba(232,112,106,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem}
+.crisis-title{font-size:.875rem;font-weight:600;color:var(--red);margin-bottom:2px}
+.crisis-sub{font-size:.75rem;color:var(--cream3)}
+
+/* CHAT */
+.chat-layout{display:flex;flex-direction:column;height:100vh}
+.chat-header{padding:14px 20px;display:flex;align-items:center;gap:12px;background:rgba(13,31,26,.94);border-bottom:1px solid var(--line);backdrop-filter:blur(16px);flex-shrink:0}
+.chat-back{width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;color:var(--cream3);transition:all .18s}
+.chat-back:hover{background:var(--bg3);color:var(--cream)}
+.chat-agent-name{font-size:.95rem;font-weight:600;color:var(--cream)}
+.chat-agent-status{font-size:.72rem;display:flex;align-items:center;gap:5px;margin-top:2px}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse-dot 1.8s infinite;flex-shrink:0}
+.chat-area{flex:1;overflow-y:auto;padding:20px 20px 12px;display:flex;flex-direction:column;gap:14px}
+.msg{display:flex;gap:10px;max-width:85%;animation:msgIn .3s cubic-bezier(.22,1,.36,1) both}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.agent{align-self:flex-start}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.msg-av2{width:32px;height:32px;border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700}
+.msg.agent .msg-av2{background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:#0d1f1a}
+.msg.user .msg-av2{background:var(--bg3);color:var(--cream2)}
+.msg-bubble2{padding:11px 14px;border-radius:16px;font-size:.875rem;line-height:1.6}
+.msg.agent .msg-bubble2{background:var(--bg3);color:var(--cream2);border-bottom-left-radius:4px}
+.msg.user .msg-bubble2{background:var(--teal);color:#0d1f1a;border-bottom-right-radius:4px;font-weight:500}
+.msg-time2{font-size:.65rem;color:var(--cream3);margin-top:4px;padding:0 2px}
+.msg.user .msg-time2{text-align:right}
+.alert-chip{align-self:center;padding:8px 16px;border-radius:99px;font-size:.75rem;font-weight:600;display:flex;align-items:center;gap:7px;animation:msgIn .3s both}
+.alert-chip.amber{background:rgba(240,168,85,.12);border:1px solid rgba(240,168,85,.25);color:var(--amber)}
+.alert-chip.red{background:rgba(232,112,106,.12);border:1px solid rgba(232,112,106,.25);color:var(--red)}
+.typing-row{display:none;align-items:center;gap:10px;align-self:flex-start}
+.typing-row.show{display:flex}
+.typing-bub{background:var(--bg3);border-radius:4px 14px 14px 14px;padding:12px 14px;display:flex;gap:4px;align-items:center}
+.td{width:6px;height:6px;border-radius:50%;background:var(--cream3);animation:td .8s infinite}
+.td:nth-child(2){animation-delay:.15s}.td:nth-child(3){animation-delay:.3s}
+@keyframes td{0%,80%,100%{transform:scale(.7);opacity:.4}40%{transform:scale(1);opacity:1}}
+.quick-chips{display:flex;gap:8px;flex-wrap:wrap;padding:8px 20px 12px}
+.qchip{padding:8px 14px;border-radius:99px;border:1px solid var(--line2);background:var(--bg2);font-size:.78rem;color:var(--cream2);cursor:pointer;transition:all .18s}
+.qchip:hover{border-color:rgba(78,203,160,.4);color:var(--teal)}
+.qchip.danger{border-color:rgba(232,112,106,.25);color:var(--red)}
+.qchip.danger:hover{background:rgba(232,112,106,.08)}
+.chat-input-bar{padding:12px 16px 16px;background:rgba(13,31,26,.94);border-top:1px solid var(--line);backdrop-filter:blur(16px);display:flex;gap:10px;align-items:flex-end;flex-shrink:0}
+.chat-input{flex:1;background:var(--bg3);border:1px solid var(--line2);border-radius:var(--r2);padding:11px 16px;font-size:.875rem;color:var(--cream);resize:none;max-height:90px;line-height:1.5;transition:border-color .18s}
+.chat-input:focus{border-color:rgba(78,203,160,.4)}
+.chat-input::placeholder{color:var(--cream3)}
+.send-btn2{width:42px;height:42px;border-radius:var(--r2);background:var(--teal);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .18s}
+.send-btn2:hover{background:#60d9b0}
+.send-btn2 svg{width:18px;height:18px;stroke:#0d1f1a;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* JOURNAL */
+.mood-week-strip{padding:20px 24px;background:linear-gradient(180deg,rgba(78,203,160,.04),transparent)}
+.week-title{font-family:var(--serif);font-size:1.1rem;color:var(--cream);margin-bottom:14px}
+.week-row{display:flex;gap:8px}
+.day-dot{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border-radius:var(--r);border:1px solid var(--line);background:var(--bg2);transition:all .2s;cursor:pointer}
+.day-dot.today{border-color:var(--teal);box-shadow:0 0 0 1px rgba(78,203,160,.2)}
+.day-dot.future{opacity:.35;cursor:default}
+.day-dot-label{font-size:.62rem;color:var(--cream3);text-transform:uppercase}
+.day-dot-emoji{font-size:1.1rem}
+.day-dot-bar{width:4px;height:20px;border-radius:99px;background:var(--bg3)}
+.day-dot-bar.filled{background:var(--teal)}.day-dot-bar.low{background:var(--red)}.day-dot-bar.mid{background:var(--amber)}
+.chart-section{padding:0 24px 20px}
+.chart-wrap{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);padding:20px;overflow:hidden}
+.chart-canvas-wrap{height:100px;display:flex;align-items:flex-end;gap:4px;position:relative;margin-top:12px}
+.chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%}
+.chart-bar{width:100%;border-radius:6px 6px 0 0;min-height:4px;transition:height .6s cubic-bezier(.22,1,.36,1)}
+.journal-section{padding:0 24px 20px}
+.journal-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden}
+.journal-tabs{display:flex;border-bottom:1px solid var(--line)}
+.j-tab{flex:1;padding:12px;font-size:.78rem;font-weight:500;color:var(--cream3);text-align:center;cursor:pointer;transition:all .18s;border-bottom:2px solid transparent;margin-bottom:-1px}
+.j-tab.active{color:var(--teal);border-bottom-color:var(--teal)}
+.journal-pane{padding:16px;display:none}
+.journal-pane.active{display:block}
+.journal-textarea{width:100%;background:transparent;border:none;font-size:.875rem;color:var(--cream2);line-height:1.7;resize:none;min-height:120px}
+.journal-textarea::placeholder{color:var(--cream3);font-style:italic}
+.journal-actions{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--line)}
+.word-count{font-size:.7rem;color:var(--cream3)}
+.save-entry-btn{padding:8px 18px;background:var(--teal);color:#0d1f1a;border-radius:var(--r);font-size:.78rem;font-weight:600;transition:all .18s}
+.save-entry-btn:hover{background:#60d9b0}
+.cbt-prompts{padding:0 24px 20px}
+.prompt-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);padding:18px;margin-bottom:10px;cursor:pointer;transition:all .2s}
+.prompt-card:hover{border-color:var(--line2);background:var(--bg3)}
+.prompt-q{font-size:.85rem;font-weight:500;color:var(--cream);margin-bottom:6px;line-height:1.5}
+.prompt-hint{font-size:.75rem;color:var(--cream3)}
+.prompt-expand{margin-top:12px;border-top:1px solid var(--line);padding-top:12px;display:none}
+.prompt-expand.open{display:block}
+.prompt-input{width:100%;background:var(--bg3);border:1px solid var(--line2);border-radius:var(--r);padding:10px 12px;font-size:.82rem;color:var(--cream);resize:none;min-height:80px;line-height:1.6;transition:border-color .18s}
+.prompt-input:focus{border-color:rgba(78,203,160,.4)}
+.prompt-input::placeholder{color:var(--cream3)}
+.past-entries{padding:0 24px 20px}
+.entry-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.entry-date-col{flex-shrink:0;text-align:center;width:40px}
+.entry-day{font-family:var(--serif);font-size:1.2rem;color:var(--cream);line-height:1}
+.entry-mon{font-size:.62rem;color:var(--cream3);text-transform:uppercase}
+.entry-preview{flex:1}
+.entry-preview-title{font-size:.82rem;font-weight:600;color:var(--cream);margin-bottom:3px}
+.entry-preview-body{font-size:.75rem;color:var(--cream3);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.entry-mood{flex-shrink:0;font-size:1.2rem}
+
+/* CARE */
+.care-hero{padding:24px 24px 20px;background:linear-gradient(180deg,rgba(106,174,232,.06),transparent)}
+.care-hero-title{font-family:var(--serif);font-size:1.6rem;color:var(--cream);margin-bottom:8px}
+.care-hero-sub{font-size:.85rem;color:var(--cream3);line-height:1.6;max-width:300px}
+.stats-banner{margin:0 24px 20px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r3);padding:20px}
+.stats-banner-title{font-size:.7rem;color:var(--cream3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.stats-banner-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sb-val{font-family:var(--serif);font-size:1.6rem;color:var(--cream)}
+.sb-lab{font-size:.68rem;color:var(--cream3);margin-top:2px;line-height:1.4}
+.counsellor-section{padding:0 24px 20px}
+.counsellor-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);padding:18px;margin-bottom:12px;display:flex;align-items:flex-start;gap:14px;transition:all .2s}
+.counsellor-card:hover{border-color:var(--line2);background:var(--bg3)}
+.counsellor-av{width:52px;height:52px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1.1rem;color:#0d1f1a;font-weight:700}
+.counsellor-name{font-size:.95rem;font-weight:600;color:var(--cream);margin-bottom:3px}
+.counsellor-spec{font-size:.75rem;color:var(--teal);margin-bottom:5px}
+.counsellor-meta{font-size:.72rem;color:var(--cream3);line-height:1.5}
+.counsellor-action{margin-left:auto;flex-shrink:0}
+.book-btn{padding:8px 14px;background:rgba(78,203,160,.12);border:1px solid rgba(78,203,160,.25);border-radius:var(--r);font-size:.75rem;color:var(--teal);font-weight:600;transition:all .18s;white-space:nowrap}
+.book-btn:hover{background:rgba(78,203,160,.2)}
+.resources-section{padding:0 24px 20px}
+.resource-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);padding:18px;margin-bottom:10px;display:flex;gap:14px;transition:all .2s;cursor:pointer}
+.resource-card:hover{border-color:var(--line2);background:var(--bg3)}
+.resource-icon{width:42px;height:42px;border-radius:var(--r);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.resource-title{font-size:.88rem;font-weight:600;color:var(--cream);margin-bottom:4px}
+.resource-desc{font-size:.75rem;color:var(--cream3);line-height:1.5}
+.resource-tag{display:inline-block;margin-top:8px;font-size:.65rem;padding:3px 8px;border-radius:99px;font-weight:600;text-transform:uppercase}
+
+/* PROFILE */
+.profile-hero{padding:32px 24px 24px;text-align:center;background:linear-gradient(180deg,rgba(78,203,160,.05),transparent)}
+.profile-big-av{width:72px;height:72px;border-radius:50%;margin:0 auto 12px;background:linear-gradient(135deg,var(--teal-dk),var(--teal));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1.6rem;color:#0d1f1a;font-weight:700;box-shadow:0 0 0 4px rgba(78,203,160,.15),0 0 0 8px rgba(78,203,160,.06)}
+.profile-user-name{font-family:var(--serif);font-size:1.4rem;color:var(--cream);margin-bottom:4px}
+.profile-user-role{font-size:.8rem;color:var(--cream3)}
+.profile-streak{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:rgba(240,168,85,.1);border:1px solid rgba(240,168,85,.2);border-radius:99px;padding:6px 16px;font-size:.78rem;color:var(--amber);font-weight:600}
+.settings-section{padding:0 24px 20px}
+.settings-group{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;margin-bottom:14px}
+.settings-group-label{font-size:.68rem;color:var(--cream3);text-transform:uppercase;letter-spacing:.08em;padding:12px 18px 4px;font-weight:600}
+.settings-row{display:flex;align-items:center;gap:12px;padding:14px 18px;border-top:1px solid var(--line);cursor:pointer;transition:all .18s}
+.settings-row:first-of-type{border-top:none}
+.settings-row:hover{background:var(--bg3)}
+.settings-icon{width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem}
+.settings-label{flex:1;font-size:.875rem;color:var(--cream)}
+.settings-val{font-size:.78rem;color:var(--cream3)}
+.settings-arrow{color:var(--cream3);font-size:1rem}
+.toggle{width:44px;height:24px;border-radius:99px;background:var(--bg4);position:relative;transition:all .25s;cursor:pointer;flex-shrink:0;border:none}
+.toggle.on{background:var(--teal)}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--cream);transition:transform .25s}
+.toggle.on::after{transform:translateX(20px)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(13,31,26,.85);z-index:300;display:none;align-items:flex-end;backdrop-filter:blur(6px)}
+.modal-overlay.open{display:flex}
+.modal-sheet{width:100%;background:var(--bg2);border:1px solid var(--line2);border-radius:var(--r3) var(--r3) 0 0;padding:24px;animation:sheetUp .35s cubic-bezier(.22,1,.36,1) both;max-height:90vh;overflow-y:auto}
+@keyframes sheetUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-handle{width:40px;height:4px;border-radius:99px;background:var(--line2);margin:0 auto 20px}
+.modal-title{font-family:var(--serif);font-size:1.3rem;color:var(--cream);margin-bottom:6px}
+.modal-sub{font-size:.82rem;color:var(--cream3);line-height:1.6;margin-bottom:20px}
+.crisis-btn{width:100%;padding:14px;border-radius:var(--r2);font-size:.9rem;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:12px;transition:all .2s}
+.crisis-btn.primary{background:var(--red);color:white}
+.crisis-btn.primary:hover{background:#f08080}
+.crisis-btn.secondary{background:var(--bg3);color:var(--cream);border:1px solid var(--line2)}
+.crisis-btn.secondary:hover{background:var(--bg4)}
+.crisis-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+
+/* TOAST */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);z-index:999;background:var(--bg3);border:1px solid var(--line2);color:var(--cream2);padding:10px 18px;border-radius:99px;font-size:.82rem;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,.4);display:flex;align-items:center;gap:8px;transition:transform .35s cubic-bezier(.22,1,.36,1),opacity .35s;opacity:0;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<!-- HOME PAGE -->
+<div id="page-home" class="page active">
+  <div class="page-header">
+    <div><div class="page-title">Good <span id="time-of-day">morning</span></div><div class="page-subtitle" id="date-display"></div></div>
+    <div class="header-avatar">PS</div>
+  </div>
+  <div class="greeting-band">
+    <div class="greeting-time" id="greeting-time">Today · Sunday</div>
+    <div class="greeting-name">How are you <em>really</em> feeling?</div>
+    <div class="greeting-sub">Your wellbeing matters. Take a moment — it only takes a few seconds.</div>
+  </div>
+  <div class="mood-section">
+    <div class="section-label">Tap your mood right now</div>
+    <div class="mood-row" id="mood-row"></div>
+  </div>
+  <div class="orb-section">
+    <div class="orb-wrap" onclick="handleOrbClick()">
+      <div class="orb-ring"></div><div class="orb-ring"></div><div class="orb-ring"></div>
+      <div class="orb" id="main-orb">
+        <div class="orb-emoji" id="orb-emoji">😌</div>
+        <div class="orb-word" id="orb-word">Calm</div>
+      </div>
+    </div>
+    <div class="orb-label" id="orb-label">Your wellness orb reflects how you've been feeling this week</div>
+    <div class="orb-tap-hint">Tap to breathe</div>
+  </div>
+  <div class="mood-section" style="padding-top:0"><div class="section-label">Your week at a glance</div></div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-val">6.8</div><div class="stat-label2">Wellness score</div><div class="stat-delta up">↑ 0.6 this week</div></div>
+    <div class="stat-card"><div class="stat-val">5</div><div class="stat-label2">Day streak 🔥</div><div class="stat-delta neu">Keep going!</div></div>
+    <div class="stat-card"><div class="stat-val">3</div><div class="stat-label2">Shraddha calls</div><div class="stat-delta up">Next: Mon 9am</div></div>
+    <div class="stat-card"><div class="stat-val">4</div><div class="stat-label2">Journal entries</div><div class="stat-delta up">↑ vs last week</div></div>
+  </div>
+  <div class="shraddha-card" style="margin-top:4px">
+    <div class="shraddha-header">
+      <div class="shraddha-av">Sh<div class="shraddha-online-dot"></div></div>
+      <div><div class="shraddha-name">Shraddha</div><div class="shraddha-role">Your Ikshana Wellness Agent · Always here</div></div>
+    </div>
+    <div class="shraddha-bubble" id="shraddha-quote">"Hey Priya — I noticed your check-in yesterday felt a bit heavy. <b>I'm here whenever you want to talk.</b> No pressure at all."</div>
+    <div class="shraddha-actions">
+      <button class="btn-teal" onclick="showPage('chat')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chat with Shraddha
+      </button>
+      <button class="btn-ghost" onclick="showPage('care')">Book a counsellor</button>
+    </div>
+  </div>
+  <div class="insights-section">
+    <div class="section-label">Insights for you</div>
+    <div class="insight-card" onclick="showPage('journal')">
+      <div class="insight-icon" style="background:rgba(78,203,160,.1)">📊</div>
+      <div>
+        <div class="insight-title">Your mood dips on Sundays</div>
+        <div class="insight-body">Over the past 3 weeks, Sunday evenings show your lowest wellness score. Over 45% of Indian professionals experience this — you are not alone. Writing in your journal tonight might help.</div>
+        <span class="insight-tag" style="background:rgba(78,203,160,.1);color:var(--teal)">Pattern found</span>
+      </div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-icon" style="background:rgba(240,168,85,.1)">😴</div>
+      <div>
+        <div class="insight-title">Sleep is affecting your score</div>
+        <div class="insight-body">On days you log less than 7 hours, your mood score drops by an average of 1.4 points. A simple wind-down routine can make a measurable difference.</div>
+        <span class="insight-tag" style="background:rgba(240,168,85,.1);color:var(--amber)">Sleep insight</span>
+      </div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-icon" style="background:rgba(106,174,232,.1)">💬</div>
+      <div>
+        <div class="insight-title">Talking helps — your data says so</div>
+        <div class="insight-body">On weeks you spoke with Shraddha, your average score was 7.4 vs 5.9 on weeks without. Consistency with small check-ins creates the biggest change over time.</div>
+        <span class="insight-tag" style="background:rgba(106,174,232,.1);color:var(--blue)">Personalised</span>
+      </div>
+    </div>
+  </div>
+  <div class="crisis-bar" onclick="openCrisisModal()">
+    <div class="crisis-icon">🆘</div>
+    <div><div class="crisis-title">Feeling overwhelmed right now?</div><div class="crisis-sub">Connect to immediate support · iCall: 9152987821</div></div>
+    <div style="margin-left:auto;color:var(--red);opacity:.6;font-size:1.2rem">›</div>
+  </div>
+</div>
+
+<!-- CHAT PAGE -->
+<div id="page-chat" class="page">
+  <div class="chat-layout">
+    <div class="chat-header">
+      <button class="chat-back" onclick="showPage('home')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="shraddha-av" style="width:38px;height:38px;font-size:.88rem;margin:0;flex-shrink:0">Sh<div class="shraddha-online-dot" style="bottom:0px;right:0px"></div></div>
+      <div>
+        <div class="chat-agent-name">Shraddha</div>
+        <div class="chat-agent-status"><span class="status-dot"></span><span style="color:var(--teal)">Active · Ikshana Health</span></div>
+      </div>
+    </div>
+    <div class="chat-area" id="chat-area">
+      <div class="msg agent" style="max-width:90%">
+        <div class="msg-av2">Sh</div>
+        <div class="msg-body">
+          <div class="msg-bubble2">Hey Priya 👋 I'm so glad you're here. This is your safe space — no judgment, just me checking in on you. How are you really doing today?</div>
+          <div class="msg-time2">Now</div>
+        </div>
+      </div>
+    </div>
+    <div class="typing-row" id="typing-row">
+      <div class="msg-av2" style="width:32px;height:32px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--teal-dk),var(--teal));display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:#0d1f1a;margin:0 0 0 10px">Sh</div>
+      <div class="typing-bub"><div class="td"></div><div class="td"></div><div class="td"></div></div>
+    </div>
+    <div class="quick-chips" id="quick-chips">
+      <button class="qchip" onclick="qSend(`I'm doing okay`)">I'm doing okay</button>
+      <button class="qchip" onclick="qSend(`Work has been a lot lately`)">Work has been a lot</button>
+      <button class="qchip" onclick="qSend(`I haven't been sleeping well`)">Not sleeping well</button>
+      <button class="qchip danger" onclick="qSend(`I'm feeling really overwhelmed and can't cope`)">Feeling overwhelmed</button>
+    </div>
+    <div class="chat-input-bar">
+      <textarea class="chat-input" id="chat-input" placeholder="Type how you're feeling…" rows="1" onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn2" onclick="sendChat()">
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- JOURNAL PAGE -->
+<div id="page-journal" class="page">
+  <div class="page-header">
+    <div><div class="page-title">Mood & Journal</div><div class="page-subtitle">Track, reflect, understand</div></div>
+    <button style="font-size:.75rem;color:var(--teal);font-weight:600" onclick="document.getElementById('j-free').focus()">+ New</button>
+  </div>
+  <div class="mood-week-strip">
+    <div class="week-title">This week</div>
+    <div class="week-row" id="week-row"></div>
+  </div>
+  <div class="chart-section">
+    <div class="section-label">30-day mood curve</div>
+    <div class="chart-wrap">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.78rem;color:var(--cream2);font-weight:600">Avg score <span style="color:var(--teal)">6.8 / 10</span></span>
+        <span style="font-size:.7rem;color:var(--cream3)">↑ +12% this month</span>
+      </div>
+      <div class="chart-canvas-wrap" id="mood-chart"></div>
+    </div>
+  </div>
+  <div class="journal-section">
+    <div class="section-label">Today's entry</div>
+    <div class="journal-card">
+      <div class="journal-tabs">
+        <div class="j-tab active" onclick="switchJTab(this,'free')">Free write</div>
+        <div class="j-tab" onclick="switchJTab(this,'gratitude')">Gratitude</div>
+        <div class="j-tab" onclick="switchJTab(this,'cbt')">Reframe</div>
+      </div>
+      <div class="journal-pane active" id="jpane-free">
+        <textarea class="journal-textarea" id="j-free" placeholder="What's on your mind right now? There are no rules here — just let it flow…" oninput="countWords(this)"></textarea>
+        <div class="journal-actions"><span class="word-count" id="word-count">0 words</span><button class="save-entry-btn" onclick="saveEntry('free')">Save entry</button></div>
+      </div>
+      <div class="journal-pane" id="jpane-gratitude">
+        <textarea class="journal-textarea" id="j-gratitude" placeholder="Three things I'm grateful for today, even small ones…&#10;&#10;1. &#10;2. &#10;3. "></textarea>
+        <div class="journal-actions"><span class="word-count">Gratitude rewires the brain 🌱</span><button class="save-entry-btn" onclick="saveEntry('gratitude')">Save entry</button></div>
+      </div>
+      <div class="journal-pane" id="jpane-cbt">
+        <textarea class="journal-textarea" id="j-cbt" placeholder="A thought that's been bothering me…&#10;&#10;What evidence supports it? What challenges it?&#10;&#10;A more balanced way to see it…"></textarea>
+        <div class="journal-actions"><span class="word-count" style="color:var(--teal)">CBT reframing ✦</span><button class="save-entry-btn" onclick="saveEntry('cbt')">Save entry</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="cbt-prompts">
+    <div class="section-label">Reflection prompts</div>
+    <div class="prompt-card" onclick="togglePrompt(this)">
+      <div class="prompt-q">What's one thing that felt really heavy this week?</div>
+      <div class="prompt-hint">Tap to reflect →</div>
+      <div class="prompt-expand"><textarea class="prompt-input" placeholder="Write freely here. No one else will see this…"></textarea></div>
+    </div>
+    <div class="prompt-card" onclick="togglePrompt(this)">
+      <div class="prompt-q">When did I feel most like myself this week?</div>
+      <div class="prompt-hint">Tap to reflect →</div>
+      <div class="prompt-expand"><textarea class="prompt-input" placeholder="Even a small moment counts…"></textarea></div>
+    </div>
+    <div class="prompt-card" onclick="togglePrompt(this)">
+      <div class="prompt-q">What would I say to a friend going through what I'm going through?</div>
+      <div class="prompt-hint">Tap to reflect →</div>
+      <div class="prompt-expand"><textarea class="prompt-input" placeholder="Be as kind to yourself as you'd be to them…"></textarea></div>
+    </div>
+    <div class="prompt-card" onclick="togglePrompt(this)">
+      <div class="prompt-q">One small thing I can do tomorrow to take care of myself?</div>
+      <div class="prompt-hint">Tap to reflect →</div>
+      <div class="prompt-expand"><textarea class="prompt-input" placeholder="Even a 5-minute walk counts…"></textarea></div>
+    </div>
+  </div>
+  <div class="past-entries">
+    <div class="section-label">Recent entries</div>
+    <div id="past-entries-list"></div>
+  </div>
+</div>
+
+<!-- CARE PAGE -->
+<div id="page-care" class="page">
+  <div class="page-header">
+    <div><div class="page-title">Your Care Team</div><div class="page-subtitle">Professional support, when you need it</div></div>
+  </div>
+  <div class="care-hero">
+    <div class="care-hero-title">You deserve <em style="font-style:italic;color:var(--teal)">real support.</em></div>
+    <div class="care-hero-sub">86% of Indian corporate employees are struggling with mental health. Asking for help is the bravest thing you can do.</div>
+  </div>
+  <div class="stats-banner">
+    <div class="stats-banner-title">India's workplace wellness reality · 2025</div>
+    <div class="stats-banner-grid">
+      <div><div class="sb-val" style="color:var(--red)">86%</div><div class="sb-lab">employees struggling with mental health (CII-MediBuddy 2025)</div></div>
+      <div><div class="sb-val" style="color:var(--amber)">59%</div><div class="sb-lab">report burnout symptoms (McKinsey Health Institute)</div></div>
+      <div><div class="sb-val" style="color:var(--blue)">45%</div><div class="sb-lab">feel Sunday anxiety about returning to work</div></div>
+      <div><div class="sb-val" style="color:var(--teal)">2.86x</div><div class="sb-lab">ROI for every ₹1 invested in workplace mental health</div></div>
+    </div>
+  </div>
+  <div class="counsellor-section">
+    <div class="section-label">Available counsellors</div>
+    <div class="counsellor-card">
+      <div class="counsellor-av" style="background:linear-gradient(135deg,#6aaee8,#3a7bc8)">DR</div>
+      <div><div class="counsellor-name">Dr Ritu Sharma</div><div class="counsellor-spec">Burnout · Work stress · Anxiety</div><div class="counsellor-meta">Clinical Psychologist · 8 yrs<br>Hindi & English · Next slot: Mon 10am</div></div>
+      <div class="counsellor-action"><button class="book-btn" onclick="bookCounsellor('Dr Ritu Sharma')">Book</button></div>
+    </div>
+    <div class="counsellor-card">
+      <div class="counsellor-av" style="background:linear-gradient(135deg,#e87078,#c04050)">PV</div>
+      <div><div class="counsellor-name">Pradeep Varma</div><div class="counsellor-spec">Relationships · Career · Depression</div><div class="counsellor-meta">Counselling Psychologist · 5 yrs<br>Telugu & English · Next slot: Tue 2pm</div></div>
+      <div class="counsellor-action"><button class="book-btn" onclick="bookCounsellor('Pradeep Varma')">Book</button></div>
+    </div>
+    <div class="counsellor-card">
+      <div class="counsellor-av" style="background:linear-gradient(135deg,#4ecba0,#2a9970)">AN</div>
+      <div><div class="counsellor-name">Ananya Nair</div><div class="counsellor-spec">Trauma · Women's health · Mindfulness</div><div class="counsellor-meta">Therapist · NIMHANS certified<br>Tamil & English · Next slot: Wed 11am</div></div>
+      <div class="counsellor-action"><button class="book-btn" onclick="bookCounsellor('Ananya Nair')">Book</button></div>
+    </div>
+  </div>
+  <div class="resources-section">
+    <div class="section-label">Self-care resources</div>
+    <div class="resource-card" onclick="showToast('Opening: Box Breathing guide…','teal')">
+      <div class="resource-icon" style="background:rgba(106,174,232,.1)">🫁</div>
+      <div><div class="resource-title">4-7-8 Breathing for anxiety</div><div class="resource-desc">Activates your parasympathetic nervous system in under 2 minutes. Scientifically backed for acute stress relief.</div><span class="resource-tag" style="background:rgba(106,174,232,.1);color:var(--blue)">2 min · Evidence-based</span></div>
+    </div>
+    <div class="resource-card" onclick="showToast('Opening: Body scan audio…','teal')">
+      <div class="resource-icon" style="background:rgba(78,203,160,.1)">🧘</div>
+      <div><div class="resource-title">Body scan for work stress</div><div class="resource-desc">A 10-minute guided scan designed for people who carry tension in their shoulders, jaw, and chest from screen time.</div><span class="resource-tag" style="background:rgba(78,203,160,.1);color:var(--teal)">10 min · Audio guided</span></div>
+    </div>
+    <div class="resource-card" onclick="showToast('Opening: CBT worksheet…','teal')">
+      <div class="resource-icon" style="background:rgba(240,168,85,.1)">📋</div>
+      <div><div class="resource-title">Sunday anxiety: a CBT worksheet</div><div class="resource-desc">Targeted at Sunday evening dread specifically. Includes thought records and behavioural experiments for this week.</div><span class="resource-tag" style="background:rgba(240,168,85,.1);color:var(--amber)">Worksheet · CBT-based</span></div>
+    </div>
+    <div class="resource-card" onclick="openCrisisModal()">
+      <div class="resource-icon" style="background:rgba(232,112,106,.1)">📞</div>
+      <div><div class="resource-title">Crisis helplines · India</div><div class="resource-desc">iCall: 9152987821 · Vandrevala Foundation: 1860-2662-345 · NIMHANS: 080-46110007 — available 24/7, free, confidential.</div><span class="resource-tag" style="background:rgba(232,112,106,.1);color:var(--red)">24/7 · Free · Confidential</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE PAGE -->
+<div id="page-profile" class="page">
+  <div class="page-header"><div class="page-title">Profile & Settings</div></div>
+  <div class="profile-hero">
+    <div class="profile-big-av">PS</div>
+    <div class="profile-user-name">Priya Sharma</div>
+    <div class="profile-user-role">Senior Engineer · Ikshana member since Jan 2025</div>
+    <div class="profile-streak">🔥 5-day check-in streak</div>
+  </div>
+  <div class="settings-section">
+    <div class="section-label">Wellness</div>
+    <div class="settings-group">
+      <div class="settings-group-label">Shraddha calls</div>
+      <div class="settings-row"><div class="settings-icon" style="background:rgba(78,203,160,.1)">📞</div><div class="settings-label">Call frequency</div><div class="settings-val">Every 2 weeks</div><div class="settings-arrow">›</div></div>
+      <div class="settings-row"><div class="settings-icon" style="background:rgba(78,203,160,.1)">⏰</div><div class="settings-label">Preferred call time</div><div class="settings-val">9:00 AM</div><div class="settings-arrow">›</div></div>
+      <div class="settings-row"><div class="settings-icon" style="background:rgba(106,174,232,.1)">🌐</div><div class="settings-label">Call language</div><div class="settings-val">English (IN)</div><div class="settings-arrow">›</div></div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-label">Notifications</div>
+      <div class="settings-row"><div class="settings-icon" style="background:rgba(240,168,85,.1)">🔔</div><div class="settings-label">Daily check-in reminder</div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+      <div class="settings-row"><div class="settings-icon" style="background:rgba(78,203,160,.1)">💬</div><div class="settings-label">Shraddha messages</div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+      <div class="settings-row"><div class="settings-icon" style="background:rgba(106,174,232,.1)">📋</div><div class="settings-label">Weekly wellness report</div><button class="toggle" onclick="this.classList.toggle('on')"></button></div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-label">Privacy & Data</div>
+      <div class="settings-row"><div class="settings-icon" style="background:rgba(78,203,160,.1)">🔒</div><div class="settings-label">Data stays in India</div><div class="settings-val" style="color:var(--teal)">AWS Mumbai</div></div>
+      <div class="settings-row"><div class="settings-icon" style="background:rgba(232,112,106,.1)">🗑️</div><div class="settings-label">Delete my data</div><div class="settings-arrow">›</div></div>
+      <div class="settings-row"><div class="settings-icon" style="background:rgba(106,174,232,.1)">📄</div><div class="settings-label">Privacy policy</div><div class="settings-arrow">›</div></div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-label">About</div>
+      <div class="settings-row"><div class="settings-icon" style="background:var(--bg3)">✨</div><div class="settings-label">Ikshana Health</div><div class="settings-val">v2.1.0</div></div>
+      <div class="settings-row" onclick="openCrisisModal()"><div class="settings-icon" style="background:rgba(232,112,106,.1)">🆘</div><div class="settings-label" style="color:var(--red)">Crisis support</div><div class="settings-arrow" style="color:var(--red)">›</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="bnav-item active" id="bnav-home" onclick="showPage('home')">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home<div class="bnav-dot"></div>
+  </button>
+  <button class="bnav-item" id="bnav-chat" onclick="showPage('chat')">
+    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Shraddha<div class="bnav-dot"></div>
+  </button>
+  <button class="bnav-item" id="bnav-journal" onclick="showPage('journal')">
+    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Journal<div class="bnav-dot"></div>
+  </button>
+  <button class="bnav-item" id="bnav-care" onclick="showPage('care')">
+    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Care<div class="bnav-dot"></div>
+  </button>
+  <button class="bnav-item" id="bnav-profile" onclick="showPage('profile')">
+    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile<div class="bnav-dot"></div>
+  </button>
+</nav>
+
+<!-- CRISIS MODAL -->
+<div class="modal-overlay" id="crisis-modal" onclick="if(event.target===this)closeCrisisModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">You are not alone 💙</div>
+    <div class="modal-sub">If you're having a difficult moment, please reach out. These services are free, confidential, and available right now.</div>
+    <button class="crisis-btn primary" onclick="showToast('Calling iCall: 9152987821…','red')">
+      <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.5a16 16 0 0 0 5.59 5.59l.95-.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21 15.5z"/></svg>
+      Call iCall now · 9152987821
+    </button>
+    <button class="crisis-btn secondary" onclick="showPage('chat');closeCrisisModal()">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Talk to Shraddha right now
+    </button>
+    <button class="crisis-btn secondary" onclick="showPage('care');closeCrisisModal()">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Book an urgent counsellor session
+    </button>
+    <div style="margin-top:16px;font-size:.75rem;color:var(--cream3);text-align:center;line-height:1.6">Vandrevala Foundation: 1860-2662-345 · NIMHANS: 080-46110007<br>All services are free and confidential 24/7</div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><div class="toast-dot" id="toast-dot"></div><span id="toast-text"></span></div>
+
+<script>
+const pages=['home','chat','journal','care','profile'];
+function showPage(id){
+  pages.forEach(p=>{const el=document.getElementById('page-'+p);el.classList.remove('active');el.style.display='none'});
+  document.querySelectorAll('.bnav-item').forEach(b=>b.classList.remove('active'));
+  const pg=document.getElementById('page-'+id);pg.style.display='flex';pg.classList.add('active');
+  const btn=document.getElementById('bnav-'+id);if(btn)btn.classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='journal')renderJournalPage();
+}
+
+function initDateTime(){
+  const now=new Date(),h=now.getHours();
+  document.getElementById('time-of-day').textContent=h<12?'morning':h<17?'afternoon':'evening';
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('date-display').textContent=days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
+  document.getElementById('greeting-time').textContent='Today · '+days[now.getDay()];
+}
+initDateTime();
+
+const MOODS=[{emoji:'😄',label:'Great',score:9,color:'#4ecba0'},{emoji:'🙂',label:'Good',score:7,color:'#6aaee8'},{emoji:'😐',label:'Okay',score:5,color:'#f0a855'},{emoji:'😔',label:'Low',score:3,color:'#e8706a'},{emoji:'😰',label:'Anxious',score:2,color:'#e87078'},{emoji:'😤',label:'Stressed',score:2,color:'#e0a030'}];
+let currentMood=null;
+function renderMoodRow(){
+  document.getElementById('mood-row').innerHTML=MOODS.map((m,i)=>`<div class="mood-chip" data-i="${i}" onclick="selectMood(${i})"><div class="mood-chip-emoji">${m.emoji}</div><div class="mood-chip-label">${m.label}</div></div>`).join('');
+}
+renderMoodRow();
+function selectMood(i){
+  currentMood=MOODS[i];
+  document.querySelectorAll('.mood-chip').forEach((c,j)=>c.classList.toggle('selected',j===i));
+  updateOrb(currentMood);
+  showToast('Mood logged: '+currentMood.emoji+' '+currentMood.label,'teal');
+  moodHistory[moodHistory.length-1]=currentMood.score;
+}
+
+const ORB_STATES=[
+  {emoji:'😄',word:'Thriving',color:'#4ecba0',shadow:'rgba(78,203,160,.35)',label:"Your energy feels strong this week. Keep nurturing it."},
+  {emoji:'🙂',word:'Steady',color:'#6aaee8',shadow:'rgba(106,174,232,.35)',label:"You're holding steady. Small acts of self-care go a long way."},
+  {emoji:'😌',word:'Calm',color:'#9b7fe8',shadow:'rgba(155,127,232,.3)',label:"Your wellness orb reflects your inner state this week."},
+  {emoji:'😔',word:'Low',color:'#e8706a',shadow:'rgba(232,112,106,.3)',label:"It's okay to feel this way. Shraddha is here to listen."},
+  {emoji:'😰',word:'Heavy',color:'#e0a030',shadow:'rgba(240,168,85,.3)',label:"You're carrying a lot. Please reach out — you don't have to carry it alone."},
+];
+function updateOrb(mood){
+  const orb=document.getElementById('main-orb');
+  let s=mood.score>=8?ORB_STATES[0]:mood.score>=6?ORB_STATES[1]:mood.score>=5?ORB_STATES[2]:mood.score>=3?ORB_STATES[3]:ORB_STATES[4];
+  document.getElementById('orb-emoji').textContent=s.emoji;
+  document.getElementById('orb-word').textContent=s.word;
+  document.getElementById('orb-label').textContent=s.label;
+  orb.style.background=`radial-gradient(ellipse at 35% 30%,${s.color} 0%,#0d4030 100%)`;
+  orb.style.boxShadow=`0 0 60px ${s.shadow},0 0 120px rgba(78,203,160,.06),inset 0 1px 0 rgba(255,255,255,.15)`;
+}
+
+let orbBreathing=false;
+function handleOrbClick(){
+  if(orbBreathing)return;
+  orbBreathing=true;
+  const orb=document.getElementById('main-orb'),label=document.getElementById('orb-label');
+  const phases=[{text:'Breathe in… 4',scale:'scale(1.12)',dur:4000},{text:'Hold… 7',scale:'scale(1.12)',dur:7000},{text:'Breathe out… 8',scale:'scale(0.94)',dur:8000},{text:'',scale:'scale(1)',dur:500}];
+  let i=0;
+  function next(){if(i>=phases.length){orbBreathing=false;label.textContent="Your wellness orb reflects how you've been feeling this week";return;}
+    const ph=phases[i++];orb.style.transform=ph.scale;orb.style.transition=`transform ${ph.dur/1000}s ease-in-out`;if(ph.text)label.textContent=ph.text;setTimeout(next,ph.dur);}
+  next();
+}
+
+const quotes=['"Hey Priya — I noticed your check-in yesterday felt a bit heavy. <b>I\'m here whenever you want to talk.</b> No pressure at all."','"Sunday evenings can be tough. I\'ve noticed you often feel this way. <b>Want to chat for a few minutes?</b> Sometimes talking helps."','"You\'ve been showing up every day this week. <b>That takes real strength.</b> I see you, and I\'m proud of you."','"It\'s okay to not be okay. <b>You don\'t have to carry everything alone.</b> I\'m right here."'];
+let qIdx=0;
+setInterval(()=>{qIdx=(qIdx+1)%quotes.length;const el=document.getElementById('shraddha-quote');el.style.opacity=0;setTimeout(()=>{el.innerHTML=quotes[qIdx];el.style.opacity=1;},300);},6000);
+document.getElementById('shraddha-quote').style.transition='opacity .3s';
+
+const moodHistory=[4,6,5,7,6,8,5,4,6,7,8,7,6,5,6,7,8,9,7,6,5,6,7,8,7,6,8,7,7,6];
+const moodData=[6,4,7,8,5,7,null];
+
+function renderWeekRow(){
+  const days=['S','M','T','W','T','F','S'];
+  const today=new Date().getDay();
+  document.getElementById('week-row').innerHTML=days.map((d,i)=>{
+    const score=moodData[i],isFuture=i>today,isToday=i===today;
+    let bar='<div class="day-dot-bar"></div>',emoji='·';
+    if(score!==null&&!isFuture){const cls=score>=7?'filled':score>=5?'mid':'low';bar=`<div class="day-dot-bar ${cls}"></div>`;emoji=score>=8?'😄':score>=6?'🙂':score>=5?'😐':'😔';}
+    else if(!isFuture){bar='<div class="day-dot-bar mid"></div>';emoji='😌';}
+    return `<div class="day-dot ${isToday?'today':''} ${isFuture?'future':''}"><div class="day-dot-label">${d}</div><div class="day-dot-emoji">${emoji}</div>${bar}</div>`;
+  }).join('');
+}
+
+function renderMoodChart(){
+  document.getElementById('mood-chart').innerHTML=moodHistory.map((v,i)=>{
+    const pct=(v/10)*100,color=v>=7?'var(--teal)':v>=5?'var(--amber)':'var(--red)';
+    return `<div class="chart-bar-wrap"><div class="chart-bar" style="height:${pct}%;background:${color};opacity:${.4+i/moodHistory.length*.6}"></div></div>`;
+  }).join('');
+}
+
+const journalEntries=[
+  {date:'22',mon:'May',title:'Tough sprint review',body:"Felt really under-appreciated today. The feedback was harsh and I didn't know how to respond. I know logically I'm doing good work but emotionally...",mood:'😔'},
+  {date:'20',mon:'May',title:'Better day today',body:"Had a good 1:1 with my manager. She noticed the extra effort. Small things really do matter when you're running on empty.",mood:'🙂'},
+  {date:'18',mon:'May',title:'Sunday feelings',body:"Can't shake the anxiety about Monday. This happens every week. Going to try the CBT worksheet Shraddha sent.",mood:'😰'},
+  {date:'15',mon:'May',title:'Moment of calm',body:"Took a proper lunch break today — walked outside for 20 mins. It sounds small but it made such a difference.",mood:'😄'},
+];
+
+function renderJournalPage(){
+  renderWeekRow();renderMoodChart();
+  document.getElementById('past-entries-list').innerHTML=journalEntries.map(e=>`
+    <div class="entry-item">
+      <div class="entry-date-col"><div class="entry-day">${e.date}</div><div class="entry-mon">${e.mon}</div></div>
+      <div class="entry-preview"><div class="entry-preview-title">${e.title}</div><div class="entry-preview-body">${e.body}</div></div>
+      <div class="entry-mood">${e.mood}</div>
+    </div>`).join('');
+}
+
+function switchJTab(el,pane){
+  document.querySelectorAll('.j-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.journal-pane').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');document.getElementById('jpane-'+pane).classList.add('active');
+}
+
+function countWords(ta){const w=ta.value.trim().split(/\s+/).filter(Boolean).length;document.getElementById('word-count').textContent=w+' word'+(w!==1?'s':'');}
+
+function saveEntry(type){
+  const ta=document.getElementById('j-'+type);
+  if(!ta.value.trim()){showToast('Write something first 📝','amber');return;}
+  const titles={free:'Personal reflection',gratitude:'Gratitude entry',cbt:'Thought reframe'};
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const now=new Date();
+  journalEntries.unshift({date:now.getDate().toString(),mon:months[now.getMonth()],title:titles[type],body:ta.value.substring(0,100),mood:currentMood?currentMood.emoji:'😌'});
+  ta.value='';showToast('Entry saved 💙','teal');renderJournalPage();
+}
+
+function togglePrompt(card){
+  const exp=card.querySelector('.prompt-expand');exp.classList.toggle('open');
+  if(exp.classList.contains('open'))card.querySelector('.prompt-input').focus();
+}
+
+const CRITICAL=['giving up','feel like hiding','chest','breathing difficulty','cant talk',"can't talk",'feeling like crying','trauma','want to talk','overwhelmed and can',"can't cope",'end it','suicidal','worthless'];
+const MODERATE=['stress','confused','sleep','low mood','anxious','not able to eat','feeling heavy','giddiness','work has been','a lot lately','exhausted','tired','burnout','burnt out'];
+function detectSev(t){
+  const l=t.toLowerCase();
+  for(const k of CRITICAL)if(l.includes(k))return{sev:'red',kw:k};
+  for(const k of MODERATE)if(l.includes(k))return{sev:'amber',kw:k};
+  if(/\b(okay|fine|good|great|better|well)\b/.test(l))return{sev:'green',kw:null};
+  return{sev:'neutral',kw:null};
+}
+const AGENT_R={
+  green:["I'm so glad to hear that! 😊 What's been the best part of your day so far?","That's lovely. Have you been able to take any time just for yourself this week?","Wonderful! And how's your sleep been? I've been thinking about you."],
+  amber:["I hear you, and I want you to know that's completely valid. Work can take so much out of us. Would you like to talk more about what's been happening?","Thank you for sharing that with me. You don't have to carry it alone. Can you tell me more about what's been feeling heaviest?","That sounds really draining. How long has it been feeling this way?"],
+  red:["Priya, I'm so grateful you told me that. It takes real courage. I want to make sure you're safe right now — can you tell me more about what you're feeling? I'm here, and I'm not going anywhere.","Thank you for trusting me with this. You matter so much. I'm connecting you with our care team right now — you won't be alone through this. Is it okay if I stay on the line with you?"],
+  neutral:["I'm listening. Sometimes it helps just to put things into words — what's been on your mind lately?","Tell me more. This is your space, and there's no rush.","How has this week been treating you? Sometimes the weight of things builds up gradually."],
+};
+function rand(a){return a[Math.floor(Math.random()*a.length)]}
+let chatTurn=0;
+
+function addMsg(text,who){
+  const chat=document.getElementById('chat-area');
+  const t=new Date(),time=t.getHours()+':'+t.getMinutes().toString().padStart(2,'0');
+  const m=document.createElement('div');m.className='msg '+who;
+  m.innerHTML=who==='agent'
+    ?`<div class="msg-av2">Sh</div><div class="msg-body"><div class="msg-bubble2">${text}</div><div class="msg-time2">${time}</div></div>`
+    :`<div class="msg-av2">PS</div><div class="msg-body"><div class="msg-bubble2">${text}</div><div class="msg-time2">${time}</div></div>`;
+  chat.appendChild(m);chat.scrollTop=chat.scrollHeight;
+}
+function addAlertChip(text,cls){
+  const chat=document.getElementById('chat-area'),ch=document.createElement('div');
+  ch.className='alert-chip '+cls;ch.innerHTML=`<span>${cls==='red'?'⚠️':'💛'}</span> ${text}`;
+  chat.appendChild(ch);chat.scrollTop=chat.scrollHeight;
+}
+function showTypingThen(ms,cb){
+  const tr=document.getElementById('typing-row');tr.classList.add('show');
+  document.getElementById('chat-area').scrollTop=99999;
+  setTimeout(()=>{tr.classList.remove('show');cb();},ms);
+}
+function setChips(chips){
+  document.getElementById('quick-chips').innerHTML=chips.map(c=>`<button class="qchip ${c.danger?'danger':''}" onclick="qSend('${c.text.replace(/'/g,"\\'")}')">${c.text}</button>`).join('');
+}
+function qSend(text){document.getElementById('chat-input').value=text;sendChat();}
+function sendChat(){
+  const inp=document.getElementById('chat-input'),text=inp.value.trim();
+  if(!text)return;inp.value='';inp.style.height='auto';
+  document.getElementById('quick-chips').innerHTML='';
+  addMsg(text,'user');chatTurn++;
+  const {sev}=detectSev(text);
+  if(sev==='red'){
+    showTypingThen(2000,()=>{addMsg(rand(AGENT_R.red),'agent');addAlertChip("Connecting you with our care team · They'll be with you shortly",'red');setChips([{text:'Yes, please stay with me'},{text:'Tell me more about the support'}]);});
+  }else if(sev==='amber'){
+    showTypingThen(1600,()=>{addMsg(rand(AGENT_R.amber),'agent');addAlertChip("I hear you — sending you some resources too 💛",'amber');setChips([{text:"It's work pressure mostly"},{text:"I haven't been sleeping well"},{text:"I just needed to say it out loud"}]);});
+  }else if(sev==='green'){
+    showTypingThen(1200,()=>{addMsg(rand(AGENT_R.green),'agent');setChips([{text:'Sleep could be better'},{text:'Work has been hectic'},{text:"I'm managing, mostly"}]);});
+  }else if(chatTurn>=4){
+    showTypingThen(1400,()=>{addMsg("Thank you so much for talking with me today, Priya. I'll check in again on Monday morning. Take good care of yourself — you deserve it 💙",'agent');setChips([]);});
+  }else{
+    showTypingThen(1300,()=>{addMsg(rand(AGENT_R.neutral),'agent');setChips([{text:"It's been a tough few weeks"},{text:"I'm more tired than usual"},{text:"I think I just needed to talk"}]);});
+  }
+}
+function handleChatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,90)+'px';}
+function bookCounsellor(name){showToast('Booking session with '+name+'…','blue');setTimeout(()=>showToast('Session confirmed! Check your email ✅','teal'),2000);}
+function openCrisisModal(){document.getElementById('crisis-modal').classList.add('open');}
+function closeCrisisModal(){document.getElementById('crisis-modal').classList.remove('open');}
+function showToast(text,type){
+  const t=document.getElementById('toast'),dot=document.getElementById('toast-dot');
+  document.getElementById('toast-text').textContent=text;
+  const colors={teal:'var(--teal)',amber:'var(--amber)',red:'var(--red)',blue:'var(--blue)'};
+  dot.style.background=colors[type]||colors.teal;
+  t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),3200);
+}
+showPage('home');
+</script>
+</body>
+</html>
